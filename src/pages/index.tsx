@@ -2,12 +2,15 @@ import { HomeContainer, Product } from '@/styles/pages/home'
 import Image from 'next/image'
 import Link from 'next/link'
 
+import Head from 'next/head'
+
 import { useKeenSlider } from 'keen-slider/react'
 
 import 'keen-slider/keen-slider.min.css'
 import { stripe } from '@/lib/stripe'
 import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
+import { Handbag } from '@phosphor-icons/react'
 
 interface HomeProps {
   products: {
@@ -21,32 +24,44 @@ interface HomeProps {
 export default function Home({ products }: HomeProps) {
   const [sliderRef] = useKeenSlider({
     slides: {
-      perView: 3,
+      perView: 2.3,
       spacing: 48,
     },
   })
 
   return (
-    <HomeContainer ref={sliderRef} className="keen-slider">
-      {products.map((product) => {
-        return (
-          <Link
-            href={`/product/${product.id}`}
-            key={product.id}
-            prefetch={false}
-          >
-            <Product className="keen-slider__slide">
-              <Image src={product.imageUrl} width={380} height={380} alt="" />
+    <>
+      <Head>
+        <title>Home | Ignite Shop</title>
+      </Head>
 
-              <footer>
-                <strong>{product.name}</strong>
-                <span>{product.price}</span>
-              </footer>
-            </Product>
-          </Link>
-        )
-      })}
-    </HomeContainer>
+      <HomeContainer ref={sliderRef} className="keen-slider">
+        {products.map((product) => {
+          return (
+            <Link
+              href={`/product/${product.id}`}
+              key={product.id}
+              prefetch={false}
+            >
+              <Product className="keen-slider__slide">
+                <Image src={product.imageUrl} width={380} height={380} alt="" />
+
+                <footer>
+                  <div>
+                    <strong>{product.name}</strong>
+                    <span>{product.price}</span>
+                  </div>
+
+                  <button title="Adicionar á sacola">
+                    <Handbag size={20} color="white" weight="bold" />
+                  </button>
+                </footer>
+              </Product>
+            </Link>
+          )
+        })}
+      </HomeContainer>
+    </>
   )
 }
 

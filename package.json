@@ -9,6 +9,7 @@
     "lint": "eslint src --ext .tsx,.ts --fix"
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.0.10",
     "@rocketseat/eslint-config": "^2.1.0",
     "@stitches/react": "^1.2.8",
     "@types/node": "20.4.4",
@@ -19,6 +20,7 @@
     "eslint-config-next": "13.4.12",
     "keen-slider": "^6.8.6",
     "next": "13.4.12",
+    "phosphor": "^0.7.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "stripe": "^12.14.0",

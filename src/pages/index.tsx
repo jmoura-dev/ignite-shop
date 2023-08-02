@@ -11,13 +11,17 @@ import { stripe } from '@/lib/stripe'
 import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
 import { Handbag } from '@phosphor-icons/react'
+import { useShoppingCart } from 'use-shopping-cart'
+import { Header } from '@/components/Header'
 
 interface HomeProps {
   products: {
     id: string
+    sku: string
     name: string
     imageUrl: string
-    price: string
+    price: number
+    currency: string
   }[]
 }
 
@@ -29,11 +33,17 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
+  const { addItem, cartDetails, cartCount, totalPrice } = useShoppingCart()
+
+  console.log(cartDetails, totalPrice)
+
   return (
     <>
       <Head>
         <title>Home | Ignite Shop</title>
       </Head>
+
+      <Header />
 
       <HomeContainer ref={sliderRef} className="keen-slider">
         {products.map((product) => {
@@ -44,7 +54,13 @@ export default function Home({ products }: HomeProps) {
               prefetch={false}
             >
               <Product className="keen-slider__slide">
-                <Image src={product.imageUrl} width={380} height={380} alt="" />
+                <Image
+                  src={product.imageUrl}
+                  priority
+                  width={380}
+                  height={380}
+                  alt=""
+                />
 
                 <footer>
                   <div>
@@ -52,7 +68,10 @@ export default function Home({ products }: HomeProps) {
                     <span>{product.price}</span>
                   </div>
 
-                  <button title="Adicionar á sacola">
+                  <button
+                    title="Adicionar á sacola"
+                    onClick={() => addItem(product)}
+                  >
                     <Handbag size={20} color="white" weight="bold" />
                   </button>
                 </footer>

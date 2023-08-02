@@ -1,3 +1,4 @@
+import { Header } from '@/components/Header'
 import { stripe } from '@/lib/stripe'
 import {
   ImageContainer,
@@ -10,13 +11,16 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
 import Stripe from 'stripe'
+import { useShoppingCart } from 'use-shopping-cart'
 
 interface ProductProps {
   product: {
     id: string
+    sku: string
+    currency: string
     name: string
     imageUrl: string
-    price: string
+    price: number
     description: string
     defaultPriceId: string
   }
@@ -25,6 +29,10 @@ interface ProductProps {
 export default function Product({ product }: ProductProps) {
   const [isCreatingCheckoutSession, setIsCreatingCheckoutSession] =
     useState(false)
+
+  const { addItem, cartDetails, cartCount } = useShoppingCart()
+
+  console.log(cartDetails, cartCount)
 
   async function handleBuyProduct() {
     try {
@@ -51,6 +59,8 @@ export default function Product({ product }: ProductProps) {
         <title>{product.name} | Ignite Shop</title>
       </Head>
 
+      <Header />
+
       <ProductContainer>
         <ImageContainer>
           <Image src={product.imageUrl} width={480} height={460} alt="" />
@@ -64,9 +74,9 @@ export default function Product({ product }: ProductProps) {
 
           <button
             disabled={isCreatingCheckoutSession}
-            onClick={handleBuyProduct}
+            onClick={() => addItem(product)}
           >
-            Comprar agora
+            Colocar na sacola
           </button>
         </ProductDetails>
       </ProductContainer>

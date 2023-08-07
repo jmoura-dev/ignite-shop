@@ -16,6 +16,8 @@ interface SuccessProps {
 }
 
 export default function Success({ customerName, productImages }: SuccessProps) {
+  const imagesQuantity = productImages.length
+
   return (
     <>
       <Head>
@@ -39,7 +41,11 @@ export default function Success({ customerName, productImages }: SuccessProps) {
 
         <p>
           Uhuu! <strong>{customerName}</strong>, sua compra de{' '}
-          <strong>{productImages.length > 1 ? 'camisetas' : 'camiseta'}</strong>{' '}
+          <strong>
+            {imagesQuantity > 1
+              ? `${imagesQuantity} camisetas`
+              : `${imagesQuantity} camiseta`}
+          </strong>{' '}
           já está a caminho da sua casa.
         </p>
 

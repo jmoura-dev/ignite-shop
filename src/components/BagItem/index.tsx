@@ -1,22 +1,21 @@
 import { BagContainer } from './styles'
 import Image from 'next/image'
 
-import Logo from '../../assets/logo.svg'
-
 interface BagItemProps {
   name: string
-  price: number
+  price: string
+  image: string
   onClick: () => void
 }
 
-export function BagItem({ name, price, onClick }: BagItemProps) {
+export function BagItem({ name, price, image, onClick }: BagItemProps) {
   return (
     <BagContainer>
-      <Image src={Logo} width={110} height={100} alt="" />
+      <Image src={image} width={110} height={100} alt="" />
 
       <div>
         <p>{name}</p>
-        <span>{`R$ ${price}`}</span>
+        <span>{price}</span>
         <button onClick={onClick}>Remover</button>
       </div>
     </BagContainer>

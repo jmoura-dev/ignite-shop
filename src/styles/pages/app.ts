@@ -7,5 +7,5 @@ export const Container = styled('div', {
   justifyContent: 'center',
   minHeight: '100vh',
   padding: '0 0.5rem',
-  overflowX: 'hidden',
+  overflow: 'hidden',
 })

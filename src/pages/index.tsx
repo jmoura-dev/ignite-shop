@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import Head from 'next/head'
+import { MouseEvent } from 'react'
 
 import { useKeenSlider } from 'keen-slider/react'
 
@@ -11,18 +12,12 @@ import { stripe } from '@/lib/stripe'
 import { GetStaticProps } from 'next'
 import Stripe from 'stripe'
 import { Handbag } from '@phosphor-icons/react'
-import { useShoppingCart } from 'use-shopping-cart'
 import { Header } from '@/components/Header'
+import { useCart } from '@/hooks/useCart'
+import { ProductProps } from '@/context/cartContext'
 
 interface HomeProps {
-  products: {
-    id: string
-    sku: string
-    name: string
-    imageUrl: string
-    price: number
-    currency: string
-  }[]
+  products: ProductProps[]
 }
 
 export default function Home({ products }: HomeProps) {
@@ -33,9 +28,17 @@ export default function Home({ products }: HomeProps) {
     },
   })
 
-  const { addItem, cartDetails, cartCount, totalPrice } = useShoppingCart()
+  const { AddNewItemToCart, checkIfItemAlreadyExists } = useCart()
 
-  console.log(cartDetails, totalPrice)
+  function handleAddNewItemToCart(
+    e: MouseEvent<HTMLButtonElement>,
+    product: ProductProps,
+    productId: string,
+  ) {
+    e.preventDefault()
+    AddNewItemToCart(product)
+    checkIfItemAlreadyExists(productId)
+  }
 
   return (
     <>
@@ -70,7 +73,10 @@ export default function Home({ products }: HomeProps) {
 
                   <button
                     title="Adicionar á sacola"
-                    onClick={() => addItem(product)}
+                    onClick={(e) =>
+                      handleAddNewItemToCart(e, product, product.id)
+                    }
+                    disabled={checkIfItemAlreadyExists(product.id)}
                   >
                     <Handbag size={20} color="white" weight="bold" />
                   </button>
@@ -100,6 +106,8 @@ export const getStaticProps: GetStaticProps = async () => {
         style: 'currency',
         currency: 'BRL',
       }).format(price.unit_amount ? price.unit_amount / 100 : 0),
+      unitPrice: price.unit_amount! / 100,
+      defaultPriceId: price.id,
     }
   })
 
